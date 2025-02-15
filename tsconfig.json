@@ -8,9 +8,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./src",
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
@@ -19,6 +19,6 @@
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "lib": ["ES2020"]
   },
-  "include": ["src/index.ts"],
+  "include": ["src/**/*"],
   "exclude": ["src/client/**/*", "node_modules", "dist", "public"]
 }
