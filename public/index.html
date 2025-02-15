@@ -1,342 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>API Test Interface</title>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <style>
-      :root {
-        --primary: #6366f1;
-        --primary-dark: #4f46e5;
-        --success: #22c55e;
-        --error: #ef4444;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-700: #374151;
-        --gray-800: #1f2937;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Arial, sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: var(--gray-100);
-        color: var(--gray-800);
-        line-height: 1.5;
-      }
-
-      .container {
-        background-color: white;
-        padding: 32px;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-
-      .section {
-        margin-bottom: 32px;
-        padding: 24px;
-        border: 1px solid var(--gray-200);
-        border-radius: 8px;
-        transition: all 0.2s ease;
-      }
-
-      .section:hover {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      }
-
-      h1 {
-        color: var(--gray-800);
-        font-size: 24px;
-        margin-bottom: 24px;
-        font-weight: 600;
-      }
-
-      h2 {
-        color: var(--gray-700);
-        font-size: 18px;
-        margin-bottom: 16px;
-        font-weight: 500;
-      }
-
-      button {
-        background-color: var(--primary);
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        margin: 5px;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-      }
-
-      button:hover {
-        background-color: var(--primary-dark);
-        transform: translateY(-1px);
-      }
-
-      button:disabled {
-        background-color: var(--gray-200);
-        color: var(--gray-700);
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      input {
-        padding: 10px 16px;
-        margin: 5px;
-        border: 1px solid var(--gray-200);
-        border-radius: 6px;
-        width: 240px;
-        font-size: 14px;
-        transition: all 0.2s ease;
-      }
-
-      input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-      }
-
-      .response {
-        background-color: var(--gray-50);
-        padding: 16px;
-        border-radius: 6px;
-        margin-top: 16px;
-        white-space: pre-wrap;
-        font-family: monospace;
-        font-size: 13px;
-        border: 1px solid var(--gray-200);
-      }
-
-      #loginStatus {
-        margin-bottom: 24px;
-        padding: 12px 16px;
-        border-radius: 6px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-      }
-
-      .logged-in {
-        background-color: rgba(34, 197, 94, 0.1);
-        color: var(--success);
-        border: 1px solid rgba(34, 197, 94, 0.2);
-      }
-
-      .logged-out {
-        background-color: rgba(239, 68, 68, 0.1);
-        color: var(--error);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-      }
-
-      .auth-controls {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .endpoint-controls {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .error {
-        color: var(--error);
-      }
-
-      .success {
-        color: var(--success);
-      }
-    </style>
+    <link rel="stylesheet" href="/dist/styles.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>API Test Interface</h1>
+    <div class="background-texture"></div>
+    <div class="gradient-blur"></div>
+    <div class="gradient-blur"></div>
+    <div class="gradient-blur"></div>
 
-      <div id="loginStatus" class="logged-out">Not logged in</div>
+    <div class="toast-container" id="toastContainer"></div>
 
-      <div class="section">
-        <h2>Authentication</h2>
-        <div class="auth-controls">
+    <div class="header-controls">
+      <div class="user-profile logged-out">
+        <div class="profile-icon" id="profileIcon">
+          <span class="status-indicator"></span>
+        </div>
+        <span class="user-email" id="userEmail"></span>
+      </div>
+      <button class="theme-switch" id="themeToggle" aria-label="Toggle theme">
+        <span class="switch-track">
+          <span class="switch-thumb">
+            <svg
+              class="sun-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3v1M12 20v1M21 12h-1M4 12H3M18.364 5.636l-.707.707M6.343 17.657l-.707.707M18.364 18.364l-.707-.707M6.343 6.343l-.707-.707M17 12a5 5 0 11-10 0 5 5 0 0110 0z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg
+              class="moon-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </span>
+      </button>
+      <button id="logoutBtn" class="icon-button" aria-label="Logout">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M18.36 6.64A9 9 0 0112 21a9 9 0 01-6.36-15.36M12 3v9"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="page">
+      <div class="container login-container">
+        <h1>Welcome Back</h1>
+        <div class="auth-form">
           <input type="email" id="email" placeholder="Email" />
           <input type="password" id="password" placeholder="Password" />
-          <button onclick="login()">Login</button>
-          <button onclick="logout()" id="logoutBtn" disabled>Logout</button>
+          <button id="loginBtn" class="primary-button">Login</button>
         </div>
-        <div id="authResponse" class="response"></div>
-      </div>
-
-      <div class="section">
-        <h2>API Endpoints</h2>
-        <div class="endpoint-controls">
-          <button onclick="checkHealth()">Check Health</button>
-          <button onclick="fetchData()" id="fetchDataBtn">Fetch Data</button>
-          <button onclick="testAuth()" id="testAuthBtn">Test Auth</button>
-        </div>
-        <div id="apiResponse" class="response"></div>
       </div>
     </div>
 
-    <script>
-      // Initialize Supabase client
-      const { createClient } = supabase;
-      const supabaseClient = createClient(
-        "https://drgblgkpqrgwwaguldgd.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZ2JsZ2twcXJnd3dhZ3VsZGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkzOTE1NDYsImV4cCI6MjA1NDk2NzU0Nn0.I5vljdkaGVZ93eaQntjAez-NV1G9raOfVw79i_Yq00k"
-      );
+    <!-- API Test Interface Page -->
+    <div id="apiTestPage" class="page hidden">
+      <div class="container">
+        <div class="header">
+          <h1>API Test Interface</h1>
+        </div>
 
-      let currentSession = null;
-
-      // Update UI based on authentication state
-      function updateAuthUI(session) {
-        const loginStatus = document.getElementById("loginStatus");
-        const logoutBtn = document.getElementById("logoutBtn");
-
-        if (session) {
-          loginStatus.textContent = `Logged in as: ${session.user.email}`;
-          loginStatus.className = "logged-in";
-          logoutBtn.disabled = false;
-          currentSession = session;
-        } else {
-          loginStatus.textContent = "Not logged in";
-          loginStatus.className = "logged-out";
-          logoutBtn.disabled = true;
-          currentSession = null;
-        }
-      }
-
-      // Authentication functions
-      async function login() {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        try {
-          const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email,
-            password,
-          });
-
-          if (error) throw error;
-
-          document.getElementById("authResponse").textContent =
-            "Login successful!";
-          document.getElementById("authResponse").className =
-            "response success";
-          updateAuthUI(data.session);
-        } catch (error) {
-          document.getElementById(
-            "authResponse"
-          ).textContent = `Error: ${error.message}`;
-          document.getElementById("authResponse").className = "response error";
-        }
-      }
-
-      async function logout() {
-        try {
-          const { error } = await supabaseClient.auth.signOut();
-          if (error) throw error;
-
-          document.getElementById("authResponse").textContent =
-            "Logged out successfully";
-          document.getElementById("authResponse").className =
-            "response success";
-          updateAuthUI(null);
-        } catch (error) {
-          document.getElementById(
-            "authResponse"
-          ).textContent = `Error: ${error.message}`;
-          document.getElementById("authResponse").className = "response error";
-        }
-      }
-
-      // API endpoint functions
-      async function checkHealth() {
-        try {
-          const response = await fetch("http://localhost:3000/health");
-          const data = await response.json();
-          document.getElementById("apiResponse").textContent = JSON.stringify(
-            data,
-            null,
-            2
-          );
-          document.getElementById("apiResponse").className = "response success";
-        } catch (error) {
-          document.getElementById(
-            "apiResponse"
-          ).textContent = `Error: ${error.message}`;
-          document.getElementById("apiResponse").className = "response error";
-        }
-      }
-
-      async function fetchData() {
-        try {
-          const headers = currentSession
-            ? { Authorization: `Bearer ${currentSession.access_token}` }
-            : {};
-
-          const response = await fetch("http://localhost:3000/data", {
-            headers,
-          });
-          const data = await response.json();
-          document.getElementById("apiResponse").textContent = JSON.stringify(
-            data,
-            null,
-            2
-          );
-          document.getElementById("apiResponse").className = response.ok
-            ? "response success"
-            : "response error";
-        } catch (error) {
-          document.getElementById(
-            "apiResponse"
-          ).textContent = `Error: ${error.message}`;
-          document.getElementById("apiResponse").className = "response error";
-        }
-      }
-
-      async function testAuth() {
-        try {
-          const headers = currentSession
-            ? { Authorization: `Bearer ${currentSession.access_token}` }
-            : {};
-
-          const response = await fetch("http://localhost:3000/test-auth", {
-            headers,
-          });
-          const data = await response.json();
-          document.getElementById("apiResponse").textContent = JSON.stringify(
-            data,
-            null,
-            2
-          );
-          document.getElementById("apiResponse").className = response.ok
-            ? "response success"
-            : "response error";
-        } catch (error) {
-          document.getElementById(
-            "apiResponse"
-          ).textContent = `Error: ${error.message}`;
-          document.getElementById("apiResponse").className = "response error";
-        }
-      }
-
-      // Check for existing session on page load
-      supabaseClient.auth.getSession().then(({ data: { session } }) => {
-        updateAuthUI(session);
-      });
-
-      // Listen for auth state changes
-      supabaseClient.auth.onAuthStateChange((event, session) => {
-        updateAuthUI(session);
-      });
-    </script>
+        <div class="section">
+          <h2>API Endpoints</h2>
+          <div class="endpoint-controls">
+            <button id="healthBtn">Check Health</button>
+            <button id="fetchDataBtn">Fetch Data</button>
+            <button id="testAuthBtn">Test Auth</button>
+          </div>
+          <div id="apiResponse" class="response"></div>
+        </div>
+      </div>
+    </div>
+    <script src="/dist/app.js"></script>
   </body>
 </html>
