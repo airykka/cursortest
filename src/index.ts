@@ -127,6 +127,7 @@ app.get('/config', (_req: Request, res: Response) => {
 });
 
 app.get('/data', authenticateUser, async (req: AuthenticatedRequest, res: Response) => {
+  const headers = req.headers;
   try {
     const { data, error } = await supabase.from('names').select('*');
 
